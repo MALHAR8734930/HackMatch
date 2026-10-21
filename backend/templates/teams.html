@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% block title %}AI Team Formation - HackMatch AI{% endblock %}
+{% block content %}
+<div class="container">
+  <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem;">
+    <div>
+      <h1 class="section-title">AI Team Formation</h1>
+      <p class="section-subtitle">
+        {% if hackathon %}
+          {{ hackathon.name }} &middot; {{ hackathon.project_domain }} &middot; {{ participants | length }} participants
+        {% else %}
+          Loading...
+        {% endif %}
+      </p>
+    </div>
+    <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+      {% if not teams %}
+      <form action="/teams/generate" method="post">
+        <button type="submit" class="btn btn-primary">Generate Teams</button>
+      </form>
+      {% else %}
+      <form action="/teams/generate" method="post" style="display: inline;">
+        <button type="submit" class="btn btn-outline">Regenerate</button>
+      </form>
+      <a href="/export/teams" class="btn btn-outline">Export CSV</a>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if not teams and participants %}
+  <div class="card" style="text-align: center; padding: 3rem;">
+    <div class="feature-icon" style="width: 72px; height: 72px; font-size: 2rem;">AI</div>
+    <h3 style="font-size: 1.25rem; margin: 1rem 0 0.5rem;">Ready to Generate Teams</h3>
+    <p style="color: var(--text-muted); max-width: 400px; margin: 0 auto 1.5rem;">
+      {{ participants | length }} participants are registered. Click "Generate Teams" to let
+      the AI algorithm form balanced teams and predict success scores.
+    </p>
+    <form action="/teams/generate" method="post">
+      <button type="submit" class="btn btn-primary">Generate Teams with AI</button>
+    </form>
+  </div>
+
+  <div class="card" style="margin-top: 2rem;">
+    <h3 style="font-size: 1.1rem; margin-bottom: 1rem; color: var(--accent-light);">AI Prediction Pipeline</h3>
+    <div class="pipeline" style="justify-content: center;">
+      {% set steps = ["Participant Data", "Feature Extraction", "Skill Encoding", "Team Formation", "Feature Calculation", "Success Prediction", "Recommendation"] %}
+      {% for step in steps %}
+      <div class="pipeline-step"><span style="color: var(--accent-light); font-family: monospace; font-size: 0.75rem; margin-right: 4px;">{{ loop.index }}</span>{{ step }}</div>
+      {% if not loop.last %}<span class="pipeline-arrow">&rarr;</span>{% endif %}
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  {% if teams %}
+  <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+    {% for team in teams %}
+    {% set score = team.score or {} %}
+    {% set label = get_score_label(score.success_score or 0) %}
+    <div class="card">
+      <div class="team-card">
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+            <div>
+              <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.25rem;">
+                <h3 style="font-size: 1.25rem;">{{ team.name }}</h3>
+                <span class="badge {% if score.success_score >= 70 %}badge-primary{% else %}badge-outline{% endif %}">{{ label.label }}</span>
+              </div>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">
+                {{ team.members | length }} members
+              </p>
+            </div>
+            <div style="text-align: right;">
+              <div class="score-large {{ label.color }}">{{ "%.1f" | format(score.success_score or 0) }}</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">Success Score</div>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            {% for member in team.members %}
+            <div class="member-row">
+              <div class="member-avatar">{{ member.full_name[0] }}</div>
+              <div style="flex: 1; min-width: 0;">
+                <p style="font-size: 0.85rem; font-weight: 500;">{{ member.full_name }}</p>
+                <p style="font-size: 0.75rem; color: var(--text-muted);">
+                  {{ member.preferred_team_role }} &middot; {{ member.experience_level }}
+                </p>
+              </div>
+              <div style="display: flex; gap: 0.25rem; flex-wrap: wrap; justify-content: flex-end; max-width: 40%;">
+                {% set member_skills = (member.ai_ml_skills + member.web_dev_skills + member.programming_languages)[:3] %}
+                {% for s in member_skills %}
+                <span class="badge badge-outline" style="font-size: 0.7rem;">{{ s }}</span>
+                {% endfor %}
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+
+          {% if team.recommendations %}
+          {% set recs = team.recommendations %}
+          {% if recs is mapping %}
+            {% for s in recs.strengths[:2] %}
+            <div class="rec-item"><span class="rec-icon" style="color: #34d399;">&#10003;</span> {{ s }}</div>
+            {% endfor %}
+            {% for w in recs.weaknesses[:1] %}
+            <div class="rec-item"><span class="rec-icon" style="color: #fbbf24;">&#9888;</span> {{ w }}</div>
+            {% endfor %}
+          {% else %}
+            {% for r in recs[:3] %}
+            <div class="rec-item">
+              <span class="rec-icon" style="color: {% if r.type == 'strength' %}#34d399{% elif r.type == 'weakness' %}#fbbf24{% else %}#60a5fa{% endif %};">
+                {% if r.type == 'strength' %}&#10003;{% elif r.type == 'weakness' %}&#9888;{% else %}&#128161;{% endif %}
+              </span>
+              {{ r.content }}
+            </div>
+            {% endfor %}
+          {% endif %}
+          {% endif %}
+
+          <div style="display: flex; gap: 0.5rem; margin-top: 0.75rem;">
+            <a href="/teams/{{ team.id }}" class="btn btn-outline btn-sm">View Details &rarr;</a>
+          </div>
+        </div>
+
+        <div>
+          <h4 style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.75rem;">Score Breakdown</h4>
+          {% set breakdown = [
+            ("Project-Skill Match", score.project_skill_match or 0, "30%"),
+            ("Skill Diversity", score.skill_diversity or 0, "20%"),
+            ("Experience", score.experience or 0, "15%"),
+            ("Role Coverage", score.role_coverage or 0, "15%"),
+            ("Compatibility", score.compatibility or 0, "10%"),
+            ("Hackathon Exp.", score.hackathon_experience or 0, "10%")
+          ] %}
+          {% for item in breakdown %}
+          <div style="margin-bottom: 0.75rem;">
+            <div style="display: flex; justify-content: font-size: 0.75rem; margin-bottom: 0.25rem;">
+              <span style="color: var(--text-muted);">{{ item[0] }} <span style="color: rgba(99,102,241,0.4);">({{ item[2] }})</span></span>
+              <span style="font-weight: 500; font-size: 0.75rem;">{{ "%.0f" | format(item[1]) }}%</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" style="width: {{ item[1] }}%;"></div></div>
+          </div>
+          {% endfor %}
+          <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--border);">
+            Note: This is a prediction score, not a guaranteed probability of winning.
+          </p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if not participants %}
+  <div class="card" style="text-align: center; padding: 3rem;">
+    <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem;">No Participants Yet</h3>
+    <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Register participants first to generate teams.</p>
+    <a href="/register" class="btn btn-primary">Register Participant</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

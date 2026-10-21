@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block title %}{{ team.name }} - HackMatch AI{% endblock %}
+{% block content %}
+<div class="container">
+  <a href="/teams" class="btn btn-outline btn-sm" style="margin-bottom: 1rem;">&larr; Back to Teams</a>
+
+  {% set score = team.score or {} %}
+  {% set label = get_score_label(score.success_score or 0) %}
+
+  <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem;">
+    <div>
+      <h1 class="section-title">{{ team.name }}</h1>
+      <p class="section-subtitle">{{ team.members | length }} members &middot; Predicted Success Score</p>
+    </div>
+    <div style="text-align: right;">
+      <div class="score-large {{ label.color }}">{{ "%.1f" | format(score.success_score or 0) }}</div>
+      <span class="badge {% if score.success_score >= 70 %}badge-primary{% else %}badge-outline{% endif %}">{{ label.label }}</span>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom: 2rem;">
+    <div class="card">
+      <h3 style="font-size: 1.1rem; margin-bottom: 1rem; color: var(--accent-light);">Team Members</h3>
+      {% for member in team.members %}
+      <div class="member-row" style="margin-bottom: 0.5rem;">
+        <div class="member-avatar">{{ member.full_name[0] }}</div>
+        <div style="flex: 1;">
+          <p style="font-size: 0.9rem; font-weight: 500;">{{ member.full_name }}</p>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">
+            {{ member.preferred_team_role }} &middot; {{ member.experience_level }} &middot;
+            {{ member.previous_hackathon_experience }}
+          </p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="card">
+      <h3 style="font-size: 1.1rem; margin-bottom: 1rem; color: var(--accent-light);">Success Prediction Breakdown</h3>
+      {% set breakdown = [
+        ("Project-Skill Match", score.project_skill_match or 0, 30),
+        ("Skill Diversity", score.skill_diversity or 0, 20),
+        ("Experience", score.experience or 0, 15),
+        ("Role Coverage", score.role_coverage or 0, 15),
+        ("Compatibility", score.compatibility or 0, 10),
+        ("Hackathon Experience", score.hackathon_experience or 0, 10)
+      ] %}
+      {% for item in breakdown %}
+      <div style="margin-bottom: 1rem;">
+        <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.25rem;">
+          <span style="color: var(--text-muted);">{{ item[0] }} <span style="color: rgba(99,102,241,0.4);">({{ item[2] }}%)</span></span>
+          <span style="font-weight: 600;">{{ "%.0f" | format(item[1]) }}%</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width: {{ item[1] }}%;"></div></div>
+      </div>
+      {% endfor %}
+      <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+        Note: This is a prediction score, not a guaranteed probability of winning.
+      </p>
+    </div>
+  </div>
+
+  {% if team.recommendations %}
+  {% set recs = team.recommendations %}
+  {% if recs is mapping %}
+  <div class="grid-3">
+    <div class="card">
+      <h3 style="font-size: 1rem; color: #34d399; margin-bottom: 0.75rem;">Strengths</h3>
+      {% for s in recs.strengths %}
+      <div class="rec-item"><span class="rec-icon" style="color: #34d399;">&#10003;</span> {{ s }}</div>
+      {% endfor %}
+    </div>
+    <div class="card">
+      <h3 style="font-size: 1rem; color: #fbbf24; margin-bottom: 0.75rem;">Weaknesses</h3>
+      {% for w in recs.weaknesses %}
+      <div class="rec-item"><span class="rec-icon" style="color: #fbbf24;">&#9888;</span> {{ w }}</div>
+      {% endfor %}
+    </div>
+    <div class="card">
+      <h3 style="font-size: 1rem; color: #60a5fa; margin-bottom: 0.75rem;">Recommended Improvements</h3>
+      {% for i in recs.improvements %}
+      <div class="rec-item"><span class="rec-icon" style="color: #60a5fa;">&#128161;</span> {{ i }}</div>
+      {% endfor %}
+    </div>
+  </div>
+  {% else %}
+  <div class="grid-3">
+    {% set grouped = {"strength": [], "weakness": [], "improvement": []} %}
+    {% for r in recs %}
+      {% if grouped.update({r.type: grouped[r.type] + [r.content]}) %}{% endif %}
+    {% endfor %}
+    <div class="card">
+      <h3 style="font-size: 1rem; color: #34d399; margin-bottom: 0.75rem;">Strengths</h3>
+      {% for s in grouped.strength %}<div class="rec-item"><span class="rec-icon" style="color: #34d399;">&#10003;</span> {{ s }}</div>{% endfor %}
+    </div>
+    <div class="card">
+      <h3 style="font-size: 1rem; color: #fbbf24; margin-bottom: 0.75rem;">Weaknesses</h3>
+      {% for w in grouped.weakness %}<div class="rec-item"><span class="rec-icon" style="color: #fbbf24;">&#9888;</span> {{ w }}</div>{% endfor %}
+    </div>
+    <div class="card">
+      <h3 style="font-size: 1rem; color: #60a5fa; margin-bottom: 0.75rem;">Recommended Improvements</h3>
+      {% for i in grouped.improvement %}<div class="rec-item"><span class="rec-icon" style="color: #60a5fa;">&#128161;</span> {{ i }}</div>{% endfor %}
+    </div>
+  </div>
+  {% endif %}
+  {% endif %}
+</div>
+{% endblock %}

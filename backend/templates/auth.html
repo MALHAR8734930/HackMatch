@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Sign In - HackMatch AI{% endblock %}
+{% block content %}
+<div class="container" style="max-width: 500px; margin-top: 3rem;">
+  <div class="glass-strong" style="padding: 2.5rem;">
+    <h1 class="section-title" style="font-size: 1.75rem; text-align: center; margin-bottom: 0.5rem;">Welcome Back</h1>
+    <p style="color: var(--text-muted); text-align: center; margin-bottom: 2rem;">Sign in to your HackMatch AI account</p>
+
+    <form action="/auth" method="post">
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" name="email" class="form-input" placeholder="you@example.com" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" name="password" class="form-input" placeholder="********" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Role</label>
+        <select name="role" class="form-select">
+          <option value="participant">Participant</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Sign In</button>
+    </form>
+
+    <p style="text-align: center; margin-top: 1.5rem; color: var(--text-muted); font-size: 0.85rem;">
+      Don't have an account? <a href="/auth" style="color: var(--accent-light);">Sign up</a>
+    </p>
+    <p style="text-align: center; margin-top: 0.5rem; color: var(--text-muted); font-size: 0.8rem;">
+      Demo mode: The dashboard works without login. Authentication adds role-based access.
+    </p>
+  </div>
+</div>
+{% endblock %}

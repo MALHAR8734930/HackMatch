@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}HackMatch AI{% endblock %}</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/" class="navbar-brand">
+      <span class="logo-icon">AI</span>
+      HackMatch AI
+    </a>
+    <div class="navbar-links">
+      <a href="/" class="{% if current_path == '/' %}active{% endif %}">Home</a>
+      <a href="/dashboard" class="{% if current_path == '/dashboard' %}active{% endif %}">Dashboard</a>
+      <a href="/register" class="{% if current_path == '/register' %}active{% endif %}">Register</a>
+      <a href="/hackathon" class="{% if current_path == '/hackathon' %}active{% endif %}">Hackathon</a>
+      <a href="/teams" class="{% if current_path == '/teams' %}active{% endif %}">Teams</a>
+      <a href="/participants" class="{% if current_path == '/participants' %}active{% endif %}">Participants</a>
+      <a href="/methodology" class="{% if current_path == '/methodology' %}active{% endif %}">Methodology</a>
+      <a href="/about" class="{% if current_path == '/about' %}active{% endif %}">About</a>
+    </div>
+  </nav>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    HackMatch AI &mdash; AI-Powered Hackathon Team Formation &amp; Success Prediction
+  </footer>
+
+  {% block scripts %}{% endblock %}
+</body>
+</html>

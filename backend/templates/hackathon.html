@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Hackathon Setup - HackMatch AI{% endblock %}
+{% block content %}
+<div class="container">
+  <h1 class="section-title">Hackathon Setup</h1>
+  <p class="section-subtitle">Configure the hackathon parameters for team generation.</p>
+
+  {% if hackathon %}
+  <div class="card" style="margin-bottom: 2rem; border-color: rgba(16, 185, 129, 0.3);">
+    <h3 style="color: #34d399; margin-bottom: 0.5rem;">Current Hackathon</h3>
+    <p><strong>{{ hackathon.name }}</strong> &mdash; {{ hackathon.project_domain }} domain, {{ hackathon.team_size }}-person teams, {{ hackathon.num_teams }} teams</p>
+    <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.5rem;">
+      Required skills: {{ hackathon.required_skills | join(", ") }}
+    </p>
+  </div>
+  {% endif %}
+
+  <form action="/hackathon" method="post" class="glass" style="padding: 2rem; max-width: 800px;">
+    <div class="grid-2">
+      <div class="form-group">
+        <label class="form-label">Hackathon Name *</label>
+        <input type="text" name="name" class="form-input" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Project Domain</label>
+        <select name="project_domain" class="form-select">
+          {% for domain in domains %}
+          <option value="{{ domain }}">{{ domain }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Number of Participants</label>
+        <input type="number" name="num_participants" class="form-input" value="30" min="2">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Team Size</label>
+        <input type="number" name="team_size" class="form-input" value="4" min="2">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Number of Teams</label>
+        <input type="number" name="num_teams" class="form-input" value="5" min="1">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Difficulty Level</label>
+        <select name="difficulty_level" class="form-select">
+          {% for level in experience_levels %}
+          <option value="{{ level }}">{{ level }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Required Skills (comma-separated)</label>
+      <input type="text" name="required_skills" class="form-input" placeholder="Python, TensorFlow, React, PostgreSQL">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Optional Skills (comma-separated)</label>
+      <input type="text" name="optional_skills" class="form-input" placeholder="Docker, AWS, GraphQL">
+    </div>
+
+    <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 1rem;">
+      Create Hackathon
+    </button>
+  </form>
+</div>
+{% endblock %}

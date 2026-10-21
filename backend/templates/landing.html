@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}HackMatch AI - Build Better Teams{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>HackMatch AI</h1>
+  <p>Build Better Teams. Predict Better Outcomes.</p>
+  <p style="max-width: 600px; margin: 0 auto 2rem;">
+    An AI-powered hackathon team formation and success prediction system that creates
+    balanced teams based on skills, interests, experience and project requirements.
+  </p>
+  <div class="hero-buttons">
+    <a href="/dashboard" class="btn btn-primary">Get Started</a>
+    <a href="/teams" class="btn btn-outline">View Demo</a>
+  </div>
+</section>
+
+<section class="container">
+  <h2 class="section-title" style="text-align: center;">How It Works</h2>
+  <p class="section-subtitle" style="text-align: center;">The AI pipeline from participant data to team predictions</p>
+
+  <div class="pipeline glass" style="justify-content: center; margin-bottom: 3rem;">
+    <div class="pipeline-step">1. Participant Data</div>
+    <span class="pipeline-arrow">&rarr;</span>
+    <div class="pipeline-step">2. Feature Extraction</div>
+    <span class="pipeline-arrow">&rarr;</span>
+    <div class="pipeline-step">3. Skill Encoding</div>
+    <span class="pipeline-arrow">&rarr;</span>
+    <div class="pipeline-step">4. Team Formation</div>
+    <span class="pipeline-arrow">&rarr;</span>
+    <div class="pipeline-step">5. Success Prediction</div>
+    <span class="pipeline-arrow">&rarr;</span>
+    <div class="pipeline-step">6. Recommendation</div>
+  </div>
+
+  <div class="feature-grid">
+    <div class="card feature-card">
+      <div class="feature-icon">AI</div>
+      <h3>AI Team Formation</h3>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">
+        Greedy optimization algorithm that maximizes compatibility, skill coverage,
+        and role diversity while preventing skill clustering.
+      </p>
+    </div>
+    <div class="card feature-card">
+      <div class="feature-icon">%</div>
+      <h3>Success Prediction</h3>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">
+        Explainable weighted scoring model with 6 components, each normalized 0-100
+        and combined with defined weights for a transparent prediction.
+      </p>
+    </div>
+    <div class="card feature-card">
+      <div class="feature-icon">SK</div>
+      <h3>Skill Matching</h3>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">
+        Binary skill encoding and Jaccard similarity for pairwise compatibility,
+        plus coverage scoring against required project skills.
+      </p>
+    </div>
+    <div class="card feature-card">
+      <div class="feature-icon">CH</div>
+      <h3>Analytics Dashboard</h3>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">
+        Interactive charts showing skill distribution, team scores, experience levels,
+        and role coverage across all generated teams.
+      </p>
+    </div>
+    <div class="card feature-card">
+      <div class="feature-icon">REC</div>
+      <h3>AI Recommendations</h3>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">
+        Rule-based engine that analyzes team composition and generates strengths,
+        weaknesses, and suggested improvements per team.
+      </p>
+    </div>
+    <div class="card feature-card">
+      <div class="feature-icon">EX</div>
+      <h3>Export &amp; CSV</h3>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">
+        Export participant lists, generated teams, scores, and prediction results
+        as CSV files for further analysis or reporting.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="container" style="text-align: center; margin-top: 3rem;">
+  <h2 class="section-title">About the Project</h2>
+  <p class="section-subtitle" style="max-width: 700px; margin: 0 auto 2rem;">
+    An academic AIML engineering project demonstrating artificial intelligence and
+    machine learning concepts through a real-world application. The system uses
+    feature extraction, skill encoding, greedy optimization, and explainable
+    weighted prediction &mdash; designed so a trained ML model can later replace
+    the scoring component.
+  </p>
+  <a href="/about" class="btn btn-outline">Learn More</a>
+</section>
+{% endblock %}

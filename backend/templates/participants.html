@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Participants - HackMatch AI{% endblock %}
+{% block content %}
+<div class="container">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div>
+      <h1 class="section-title">Participants</h1>
+      <p class="section-subtitle">{{ participants | length }} registered participants</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+      <a href="/register" class="btn btn-primary">Add Participant</a>
+      <a href="/export/participants" class="btn btn-outline">Export CSV</a>
+    </div>
+  </div>
+
+  <div class="card" style="overflow-x: auto;">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>College</th>
+          <th>Experience</th>
+          <th>Role</th>
+          <th>Skills</th>
+          <th>Hackathon Exp</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in participants %}
+        <tr>
+          <td style="font-weight: 500;">{{ p.full_name }}</td>
+          <td style="color: var(--text-muted); font-size: 0.85rem;">{{ p.email }}</td>
+          <td>{{ p.college }}</td>
+          <td><span class="badge badge-outline">{{ p.experience_level }}</span></td>
+          <td><span class="badge badge-primary">{{ p.preferred_team_role }}</span></td>
+          <td style="font-size: 0.8rem; color: var(--text-muted);">
+            {{ (p.ai_ml_skills + p.web_dev_skills + p.programming_languages)[:4] | join(", ") }}
+            {% if (p.ai_ml_skills + p.web_dev_skills + p.programming_languages) | length > 4 %}...{% endif %}
+          </td>
+          <td style="font-size: 0.8rem; color: var(--text-muted);">{{ p.previous_hackathon_experience }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

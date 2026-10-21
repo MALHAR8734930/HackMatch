@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}About - HackMatch AI{% endblock %}
+{% block content %}
+<div class="container" style="max-width: 800px;">
+  <h1 class="section-title">About the Project</h1>
+  <p class="section-subtitle">HackMatch AI &mdash; Academic AIML Engineering Project</p>
+
+  <div class="card" style="margin-bottom: 1.5rem;">
+    <h3 style="color: var(--accent-light); margin-bottom: 0.75rem;">Problem Statement</h3>
+    <p style="color: var(--text-muted); font-size: 0.9rem;">
+      Forming balanced hackathon teams manually is time-consuming and often results in
+      unbalanced teams with skill gaps, role overlaps, or experience mismatches. There is
+      no systematic way to predict how well a team will perform based on its composition.
+    </p>
+  </div>
+
+  <div class="card" style="margin-bottom: 1.5rem;">
+    <h3 style="color: var(--accent-light); margin-bottom: 0.75rem;">Objectives</h3>
+    <ul style="color: var(--text-muted); font-size: 0.9rem; padding-left: 1.5rem; line-height: 1.8;">
+      <li>Automatically form balanced teams using participant skills, interests, and experience</li>
+      <li>Match teams to hackathon project requirements</li>
+      <li>Predict team success using an explainable scoring model</li>
+      <li>Generate actionable recommendations for team improvement</li>
+      <li>Demonstrate AI/ML concepts in a real-world application</li>
+    </ul>
+  </div>
+
+  <div class="card" style="margin-bottom: 1.5rem;">
+    <h3 style="color: var(--accent-light); margin-bottom: 0.75rem;">Methodology</h3>
+    <p style="color: var(--text-muted); font-size: 0.9rem;">
+      The system follows a pipeline: Participant Data &rarr; Feature Extraction &rarr; Skill
+      Encoding &rarr; Team Formation (greedy optimization) &rarr; Success Prediction (weighted
+      scoring) &rarr; Recommendation Generation (rule-based). All features are normalized to
+      the 0-1 range. See the <a href="/methodology" style="color: var(--accent-light);">Methodology page</a>
+      for details.
+    </p>
+  </div>
+
+  <div class="card" style="margin-bottom: 1.5rem;">
+    <h3 style="color: var(--accent-light); margin-bottom: 0.75rem;">Technology Stack</h3>
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; font-size: 0.85rem;">
+      <div><strong>Frontend (Python version):</strong> FastAPI + Jinja2 templates</div>
+      <div><strong>Frontend (React version):</strong> React + TypeScript + Vite</div>
+      <div><strong>Backend:</strong> FastAPI (Python) / Supabase Edge Functions</div>
+      <div><strong>Database:</strong> Supabase PostgreSQL</div>
+      <div><strong>Auth:</strong> Supabase Authentication</div>
+      <div><strong>AI/ML:</strong> Custom Python modules (NumPy)</div>
+      <div><strong>Charts:</strong> CSS-based bar charts / Recharts (React)</div>
+      <div><strong>Styling:</strong> Custom CSS (dark AI theme)</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom: 1.5rem;">
+    <h3 style="color: var(--accent-light); margin-bottom: 0.75rem;">Future Scope</h3>
+    <ul style="color: var(--text-muted); font-size: 0.9rem; padding-left: 1.5rem; line-height: 1.8;">
+      <li>Replace weighted scoring with a trained ML model (regression/classification)</li>
+      <li>Use clustering algorithms (K-Means, DBSCAN) for team formation</li>
+      <li>Add genetic algorithm or simulated annealing for optimization</li>
+      <li>Train on historical hackathon outcomes data</li>
+      <li>Add real-time collaboration features</li>
+      <li>Integrate NLP for project description analysis</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3 style="color: var(--accent-light); margin-bottom: 0.75rem;">Limitations</h3>
+    <ul style="color: var(--text-muted); font-size: 0.9rem; padding-left: 1.5rem; line-height: 1.8;">
+      <li>The weighted scoring model is heuristic, not trained on real data</li>
+      <li>Team formation uses greedy optimization, which may not find the global optimum</li>
+      <li>Prediction scores are estimates, not guaranteed outcomes</li>
+      <li>Recommendations are rule-based, not learned from data</li>
+      <li>Does not account for interpersonal dynamics or communication styles</li>
+    </ul>
+  </div>
+</div>
+{% endblock %}

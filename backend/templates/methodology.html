@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}AI Methodology - HackMatch AI{% endblock %}
+{% block content %}
+<div class="container" style="max-width: 900px;">
+  <h1 class="section-title">AI Methodology</h1>
+  <p class="section-subtitle">How the HackMatch AI system works end-to-end</p>
+
+  <div class="card" style="margin-bottom: 2rem;">
+    <h3 style="color: var(--accent-light); margin-bottom: 1rem;">Architecture Diagram</h3>
+    <div class="pipeline" style="justify-content: center; flex-wrap: wrap;">
+      {% set steps = ["Participant Data", "Feature Extraction", "Skill Encoding", "Team Formation", "Feature Calculation", "Success Prediction", "Recommendation"] %}
+      {% for step in steps %}
+      <div class="pipeline-step"><span style="color: var(--accent-light); font-family: monospace; font-size: 0.75rem; margin-right: 4px;">{{ loop.index }}</span>{{ step }}</div>
+      {% if not loop.last %}<span class="pipeline-arrow">&rarr;</span>{% endif %}
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom: 1.5rem;">
+    <h3 style="color: var(--accent-light); margin-bottom: 0.75rem;">1. Input Data</h3>
+    <p style="color: var(--text-muted); font-size: 0.9rem;">
+      Participant profiles include technical skills, programming languages, AI/ML skills,
+      web development skills, database skills, UI/UX skills, soft skills, areas of interest,
+      experience level (Beginner to Expert), previous hackathon experience, preferred team role,
+      and project interests. Hackathon configuration includes project domain, required skills,
+      optional skills, team size, and number of teams.
+    </p>
+  </div>
+
+  <div class="card" style="margin-bottom: 1.5rem;">
+    <h3 style="color: var(--accent-light); margin-bottom: 0.75rem;">2. Feature Engineering</h3>
+    <p style="color: var(--text-muted); font-size: 0.9rem;">
+      Raw participant data is transformed into normalized numerical features in the 0-1 range.
+      Experience levels are mapped to 0.25, 0.50, 0.75, and 1.0. Previous hackathon experience
+      is parsed and normalized (5+ hackathons = 1.0). Skill count is normalized against the
+      maximum across all participants. Technical depth is computed as the ratio of advanced
+      skills to total skills.
+    </p>
+  </div>
+
+  <div class="card" style="margin-bottom: 1.5rem;">
+    <h3 style="color: var(--accent-light); margin-bottom: 0.75rem;">3. Skill Encoding</h3>
+    <p style="color: var(--text-muted); font-size: 0.9rem;">
+      A skill vocabulary is built from all unique skills across all participants. Each participant
+      is then encoded as a binary vector against this vocabulary (1 if they have the skill, 0 if not).
+      This enables cosine similarity and Jaccard similarity computations between participants.
+    </p>
+  </div>
+
+  <div class="card" style="margin-bottom: 1.5rem;">
+    <h3 style="color: var(--accent-light); margin-bottom: 0.75rem;">4. Team Formation Algorithm</h3>
+    <p style="color: var(--text-muted); font-size: 0.9rem;">
+      A greedy optimization approach is used. Phase 1 anchors each team with the most experienced
+      participants. Phase 2 iteratively assigns remaining participants to the team where they add
+      the most value, based on a weighted score of: compatibility with existing members (35%),
+      skill coverage gain (30%), experience balance (20%), role diversity penalty (prevents same-role
+      clustering), and team size balance (15%). The algorithm ensures no participant appears in
+      multiple teams.
+    </p>
+  </div>
+
+  <div class="card" style="margin-bottom: 1.5rem;">
+    <h3 style="color: var(--accent-light); margin-bottom: 0.75rem;">5. Success Prediction</h3>
+    <p style="color: var(--text-muted); font-size: 0.9rem;">
+      An explainable weighted scoring model computes 6 sub-scores, each normalized 0-100:
+    </p>
+    <table class="table" style="margin-top: 1rem;">
+      <thead><tr><th>Component</th><th>Weight</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>Project-Skill Match</td><td>30%</td><td>Coverage of required hackathon skills</td></tr>
+        <tr><td>Skill Diversity</td><td>20%</td><td>Unique skills relative to team size</td></tr>
+        <tr><td>Experience</td><td>15%</td><td>Average experience level of members</td></tr>
+        <tr><td>Role Coverage</td><td>15%</td><td>Distinct roles covered out of 8 possible</td></tr>
+        <tr><td>Compatibility</td><td>10%</td><td>Average pairwise compatibility</td></tr>
+        <tr><td>Hackathon Experience</td><td>10%</td><td>Average prior hackathon experience</td></tr>
+      </tbody>
+    </table>
+    <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 1rem;">
+      The final score is the weighted sum. The architecture is designed so a trained ML model can
+      later replace this scoring function while keeping the same feature interface.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 style="color: var(--accent-light); margin-bottom: 0.75rem;">6. Recommendation Engine</h3>
+    <p style="color: var(--text-muted); font-size: 0.9rem;">
+      A rule-based engine analyzes each team's composition and generates human-readable
+      recommendations. It checks for missing critical roles (UI/UX, Frontend, Backend, AI/ML for
+      Generative AI domain), skill coverage gaps, experience balance, hackathon experience,
+      skill diversity, shared interests, and domain-specific needs. Output is categorized into
+      strengths, weaknesses, and recommended improvements.
+    </p>
+  </div>
+</div>
+{% endblock %}
