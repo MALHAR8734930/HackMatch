@@ -3,6 +3,7 @@ httpx
 jinja2
 numpy<2
 python-multipart
+python-dotenv
 uvicorn
 
 # PandasAI dependencies
