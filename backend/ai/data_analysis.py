@@ -12,7 +12,7 @@ def analyze_participants(participants: list[dict[str, Any]], question: str) -> A
     api_key = os.environ.get("OPENAI_API_KEY")
     if not api_key:
         raise RuntimeError(
-            "OPENAI_API_KEY is missing. Add it to project/.env and restart the FastAPI backend."
+            "OPENAI_API_KEY is not configured for the FastAPI service. Set it in the service environment and restart the backend."
         )
 
     try:

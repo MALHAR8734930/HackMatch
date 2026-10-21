@@ -19,7 +19,7 @@ def ask_copilot(question: str, context: dict[str, Any] | None = None) -> str:
     api_key = os.environ.get("OPENAI_API_KEY") or github_token
     if not api_key:
         raise RuntimeError(
-            "OPENAI_API_KEY is missing. Add it to project/.env and restart the FastAPI backend."
+            "OPENAI_API_KEY is not configured for the FastAPI service. Set it in the service environment and restart the backend."
         )
 
     try:
