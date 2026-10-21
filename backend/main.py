@@ -66,6 +66,11 @@ app.add_middleware(
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
 
+@app.get("/health")
+async def health_check():
+    return {"status": "ok"}
+
+
 def _base_context(request: Request) -> dict:
     return {"request": request, "current_path": request.url.path}
 

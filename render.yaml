@@ -5,14 +5,17 @@ services:
     rootDir: .
     buildCommand: pip install -r backend/requirements.txt
     startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
     envVars:
       - key: FRONTEND_URL
-        sync: false
+        value: https://hack-match-qjrszqil9-mhatremb1234-8512.vercel.app
       - key: OPENAI_API_KEY
         sync: false
       - key: OPENAI_MODEL
         value: gpt-4o-mini
       - key: SUPABASE_URL
+        value: https://mbypxuwsqsohatzhhihf.supabase.co
+      - key: SUPABASE_ANON_KEY
         sync: false
-      - key: SUPABASE_SERVICE_ROLE_KEY
-        sync: false
+      - key: PYTHON_VERSION
+        value: 3.11.11
